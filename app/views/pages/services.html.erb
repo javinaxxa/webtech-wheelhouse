@@ -12,8 +12,8 @@
   <tbody>
     <% @services.each do |service| %>
       <tr>
-        <td><%= service[:name] %></td>
-        <td class="text-end">$<%= number_with_delimiter(service[:price]) %></td>
+        <td><%= service.name %></td>
+        <td class="text-end">$<%= number_with_delimiter(service.current_price.to_i) %></td>
       </tr>
     <% end %>
   </tbody>

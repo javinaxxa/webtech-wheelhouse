@@ -1,8 +1,6 @@
 # Wheelhouse
 
-Wheelhouse is a repair-tracking system for a neighbourhood bicycle repair shop. It replaces paper
-tags tied to handlebars, three mechanics' private notebooks, and phone calls to the back of the shop
-with one place to see what is happening to every bike currently in for repair.
+Wheelhouse is a repair tracking system for a neighbourhood bicycle repair shop. It replaces paper tags tied to handlebars, three mechanics' private notebooks, and phone calls to the back of the shop with one place to see what is happening to every bike currently in for repair.
 
 ## Who uses it
 
@@ -22,8 +20,8 @@ with one place to see what is happening to every bike currently in for repair.
 
 - Ruby 4.0.4
 - Rails 8.0
-- Node 26.1.0 (only used to compile Bootstrap's Sass — there is no JavaScript build step)
-- PostgreSQL, running locally, with a role that can create databases
+- Node 26.1.0 and Yarn 1.22 
+- PostgreSQL 17.5, running locally. The application connects using your local system role — no separate username or password is configured. If your PostgreSQL installation requires one, adjust `config/database.yml` before running the setup commands below.
 
 ## Setup
 
@@ -32,8 +30,10 @@ git clone <this repository's URL>
 cd webtech-wheelhouse
 bundle install
 yarn install
-bin/rails db:create
+bin/rails db:prepare
 ```
+
+`bin/rails db:prepare` creates the database if it doesn't exist, loads the schema, and seeds it one command, for a fresh clone.
 
 ## Running the application
 
@@ -41,7 +41,7 @@ bin/rails db:create
 bin/dev
 ```
 
-`bin/dev` starts both the Rails server and the Bootstrap Sass watcher. Using `bin/rails server`
-alone will start the app but will not rebuild the CSS if you change it.
+`bin/dev` starts the Rails server and Bootstrap's Sass watcher. The compiled CSS is not
+version-controlled, so `bin/dev` is how the application is meant to be started: `bin/rails server` on its own will boot it, but with no styles.
 
-Then open `http://localhost:3000`.
+Then open `http://localhost:3000`. The services page reads its price list from the seeded database.
