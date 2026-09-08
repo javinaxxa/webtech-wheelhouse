@@ -21,7 +21,7 @@ Wheelhouse is a repair tracking system for a neighbourhood bicycle repair shop. 
 - Ruby 4.0.4
 - Rails 8.0
 - Node 26.1.0 and Yarn 1.22 
-- PostgreSQL 17.5, running locally. The application connects using your local system role — no separate username or password is configured. If your PostgreSQL installation requires one, adjust `config/database.yml` before running the setup commands below.
+- PostgreSQL 17.5, running locally. The application connects using your local system role.
 
 ## Setup
 
