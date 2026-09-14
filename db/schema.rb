@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_08_002505) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_14_233528) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,7 +56,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_002505) do
     t.bigint "received_by_id", null: false
     t.string "status", default: "dropped_off", null: false
     t.datetime "updated_at", null: false
+    t.index ["assigned_mechanic_id"], name: "index_repairs_on_assigned_mechanic_id"
     t.index ["bike_id"], name: "index_repairs_on_bike_id"
+    t.index ["received_by_id"], name: "index_repairs_on_received_by_id"
   end
 
   create_table "service_types", force: :cascade do |t|
@@ -73,4 +75,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_002505) do
     t.string "role", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "bikes", "customers"
+  add_foreign_key "repair_line_items", "repairs"
+  add_foreign_key "repair_line_items", "service_types"
+  add_foreign_key "repairs", "bikes"
+  add_foreign_key "repairs", "staff_members", column: "assigned_mechanic_id"
+  add_foreign_key "repairs", "staff_members", column: "received_by_id"
 end
