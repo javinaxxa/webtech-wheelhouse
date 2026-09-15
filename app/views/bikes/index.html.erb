@@ -1,0 +1,22 @@
+<% content_for :title, "Bikes" %>
+
+<h1 class="h3 mb-4">Bikes</h1>
+
+<% if @bikes.empty? %>
+  <p class="text-muted">No bikes on file.</p>
+<% else %>
+  <table class="table table-striped table-hover align-middle">
+    <thead>
+      <tr>
+        <th>Bike</th>
+        <th>Colour</th>
+        <th>Serial</th>
+        <th>Owner</th>
+        <th>Repairs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @bikes %>
+    </tbody>
+  </table>
+<% end %>

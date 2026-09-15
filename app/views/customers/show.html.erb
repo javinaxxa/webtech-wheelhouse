@@ -1,0 +1,33 @@
+<% content_for :title, @customer.name %>
+
+<div class="card">
+  <div class="card-body">
+    <h1 class="card-title h4"><%= @customer.name %></h1>
+    <p class="card-text text-muted"><%= @customer.phone %></p>
+  </div>
+</div>
+
+<h2 class="h5 mt-4">
+  <%= pluralize(@customer.bikes.size, "bike") %>
+</h2>
+
+<% if @customer.bikes.empty? %>
+  <p class="text-muted">This customer has no bikes on file.</p>
+<% else %>
+  <table class="table table-sm align-middle">
+    <thead>
+      <tr>
+        <th>Bike</th>
+        <th>Colour</th>
+        <th>Serial</th>
+        <th>Owner</th>
+        <th>Repairs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @customer.bikes %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= link_to "All customers", customers_path, class: "btn btn-outline-secondary mt-3" %>
