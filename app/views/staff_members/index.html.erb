@@ -1,0 +1,21 @@
+<% content_for :title, "Staff" %>
+
+<h1 class="h3 mb-4">Staff</h1>
+
+<% if @staff_members.empty? %>
+  <p class="text-muted">Nobody works here yet.</p>
+<% else %>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Repairs assigned</th>
+        <th>Repairs received</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @staff_members %>
+    </tbody>
+  </table>
+<% end %>

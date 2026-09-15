@@ -1,0 +1,56 @@
+<% content_for :title, @staff_member.name %>
+
+<div class="card">
+  <div class="card-body">
+    <h1 class="card-title h4"><%= @staff_member.name %></h1>
+    <p class="card-text text-muted"><%= @staff_member.role.humanize %></p>
+  </div>
+</div>
+
+<h2 class="h5 mt-4">
+  <%= pluralize(@staff_member.assigned_repairs.size, "repair") %> assigned
+</h2>
+
+<% if @staff_member.assigned_repairs.empty? %>
+  <p class="text-muted">No repairs assigned to this person.</p>
+<% else %>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Bike</th>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Promised</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @staff_member.assigned_repairs %>
+    </tbody>
+  </table>
+<% end %>
+
+<h2 class="h5 mt-4">
+  <%= pluralize(@staff_member.received_repairs.size, "repair") %> received at the counter
+</h2>
+
+<% if @staff_member.received_repairs.empty? %>
+  <p class="text-muted">This person has not received any repair.</p>
+<% else %>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Bike</th>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Promised</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @staff_member.received_repairs %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= link_to "All staff", staff_members_path, class: "btn btn-outline-secondary mt-3" %>
