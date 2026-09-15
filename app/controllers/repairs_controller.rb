@@ -6,3 +6,4 @@ class RepairsController < ApplicationController
   def show
     @repair = Repair.find(params[:id])
   end
+end
