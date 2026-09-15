@@ -1,0 +1,100 @@
+<% content_for :title, "Repair ##{@repair.id}" %>
+
+<div class="card">
+  <div class="card-body">
+    <h1 class="card-title h4">
+      Repair #<%= @repair.id %> <%= status_badge(@repair) %>
+    </h1>
+
+    <dl class="row mb-0 mt-3">
+      <dt class="col-sm-3">Bike</dt>
+      <dd class="col-sm-9">
+        <%= link_to "#{@repair.bike.make} #{@repair.bike.model} (#{@repair.bike.serial_number})", @repair.bike %>
+      </dd>
+
+      <dt class="col-sm-3">Customer</dt>
+      <dd class="col-sm-9">
+        <%= link_to @repair.bike.customer.name, @repair.bike.customer %>
+      </dd>
+
+      <dt class="col-sm-3">Received by</dt>
+      <dd class="col-sm-9"><%= link_to @repair.received_by.name, @repair.received_by %></dd>
+
+      <dt class="col-sm-3">Mechanic</dt>
+      <dd class="col-sm-9">
+        <% if @repair.assigned_mechanic %>
+          <%= link_to @repair.assigned_mechanic.name, @repair.assigned_mechanic %>
+        <% else %>
+          <span class="text-muted">Not assigned yet</span>
+        <% end %>
+      </dd>
+
+      <dt class="col-sm-3">Dropped off</dt>
+      <dd class="col-sm-9"><%= l(@repair.dropped_off_at, format: :long) %></dd>
+
+      <dt class="col-sm-3">Promised</dt>
+      <dd class="col-sm-9">
+        <%= l(@repair.promised_on, format: :long) %>
+        <% if repair_overdue?(@repair) %>
+          <span class="badge text-bg-warning">Overdue</span>
+        <% end %>
+      </dd>
+
+      <dt class="col-sm-3">Completed</dt>
+      <dd class="col-sm-9">
+        <%= @repair.completed_at ? l(@repair.completed_at, format: :long) : content_tag(:span, "Not yet", class: "text-muted") %>
+      </dd>
+
+      <dt class="col-sm-3">Picked up</dt>
+      <dd class="col-sm-9">
+        <%= @repair.picked_up_at ? l(@repair.picked_up_at, format: :long) : content_tag(:span, "Still in the shop", class: "text-muted") %>
+      </dd>
+
+      <dt class="col-sm-3">Customer approved</dt>
+      <dd class="col-sm-9">
+        <% if @repair.customer_approved.nil? %>
+          <span class="text-muted">Not asked yet</span>
+        <% else %>
+          <%= @repair.customer_approved ? "Yes" : "No" %>
+        <% end %>
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<h2 class="h5 mt-4">
+  <%= pluralize(@repair.repair_line_items.size, "service") %> charged
+</h2>
+
+<% if @repair.repair_line_items.empty? %>
+  <p class="text-muted">Nothing charged on this repair yet.</p>
+<% else %>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Note</th>
+        <th class="text-end">Price charged</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @repair.repair_line_items.each do |line| %>
+        <tr>
+          <td><%= link_to line.service_type.name, line.service_type %></td>
+          <td><%= line.discount_note || "-" %></td>
+          <td class="text-end"><%= money(line.price_charged) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr class="fw-bold">
+        <td colspan="2">Total</td>
+        <td class="text-end">
+          <%= money(@repair.repair_line_items.sum(&:price_charged)) %>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>
+
+<%= link_to "All repairs", repairs_path, class: "btn btn-outline-secondary mt-3" %>

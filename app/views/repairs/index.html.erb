@@ -1,0 +1,22 @@
+<% content_for :title, "Repairs" %>
+
+<h1 class="h3 mb-4">Repairs</h1>
+
+<% if @repairs.empty? %>
+  <p class="text-muted">No repairs on the books.</p>
+<% else %>
+  <table class="table table-striped table-hover align-middle">
+    <thead>
+      <tr>
+        <th>Bike</th>
+        <th>Customer</th>
+        <th>Status</th>
+        <th>Promised</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @repairs %>
+    </tbody>
+  </table>
+<% end %>

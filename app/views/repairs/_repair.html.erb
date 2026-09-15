@@ -1,0 +1,7 @@
+<tr class="<%= repair_row_class(repair) %>">
+  <td><%= link_to "#{repair.bike.make} #{repair.bike.model}", repair.bike %></td>
+  <td><%= link_to repair.bike.customer.name, repair.bike.customer %></td>
+  <td><%= status_badge(repair) %></td>
+  <td><%= l(repair.promised_on, format: :long) %></td>
+  <td><%= link_to "Detail", repair, class: "btn btn-sm btn-outline-secondary" %></td>
+</tr>
