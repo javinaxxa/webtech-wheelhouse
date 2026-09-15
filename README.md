@@ -44,4 +44,4 @@ bin/dev
 `bin/dev` starts the Rails server and Bootstrap's Sass watcher. The compiled CSS is not
 version-controlled, so `bin/dev` is how the application is meant to be started: `bin/rails server` on its own will boot it, but with no styles.
 
-Then open `http://localhost:3000`. The services page reads its price list from the seeded database.
+Then open `http://localhost:3000`. Every page reads from the seeded database: the navbar links to the list of repairs, bikes, customers, services and staff, and each row links to its own page.
