@@ -7,11 +7,9 @@
   </div>
 </div>
 
-<h2 class="h5 mt-4">
-  <%= pluralize(@service_type.repair_line_items.size, "time") %> charged
-</h2>
+<h2 class="h5 mt-4"><%= pluralize(@lines.size, "time") %> charged</h2>
 
-<% if @service_type.repair_line_items.empty? %>
+<% if @lines.empty? %>
   <p class="text-muted">This service has never been charged on a repair.</p>
 <% else %>
   <table class="table table-sm">
@@ -23,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @service_type.repair_line_items.each do |line| %>
+      <% @lines.each do |line| %>
         <tr>
           <td><%= link_to "Repair ##{line.repair.id}", line.repair %></td>
           <td><%= link_to "#{line.repair.bike.make} #{line.repair.bike.model}", line.repair.bike %></td>

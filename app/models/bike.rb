@@ -4,4 +4,6 @@ class Bike < ApplicationRecord
 
   validates :make, :model, :color, :serial_number, presence: true
   validates :serial_number, uniqueness: { message: "is already on file for another bike" }
+
+  scope :by_make_and_model, -> { order(:make, :model, :serial_number) }
 end

@@ -3,14 +3,8 @@ module RepairsHelper
     tag.span repair.status.humanize, class: "badge text-bg-#{status_color(repair)}"
   end
 
-  def repair_overdue?(repair)
-    return false if repair.picked_up?
-
-    repair.promised_on < Date.current
-  end
-
   def repair_row_class(repair)
-    "table-warning" if repair_overdue?(repair)
+    "table-warning" if repair.overdue?
   end
 
   private

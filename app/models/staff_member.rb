@@ -5,4 +5,6 @@ class StaffMember < ApplicationRecord
                               dependent: :nullify
 
   validates :name, :role, presence: true
+
+  scope :by_role_and_name, -> { order(:role, :name) }
 end

@@ -3,4 +3,6 @@ class Customer < ApplicationRecord
   has_many :repairs, through: :bikes, dependent: :restrict_with_error
 
   validates :name, :phone, presence: true
+
+  scope :by_name, -> { order(:name) }
 end

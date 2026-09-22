@@ -35,7 +35,7 @@
       <dt class="col-sm-3">Promised</dt>
       <dd class="col-sm-9">
         <%= l(@repair.promised_on, format: :long) %>
-        <% if repair_overdue?(@repair) %>
+        <% if @repair.overdue? %>
           <span class="badge text-bg-warning">Overdue</span>
         <% end %>
       </dd>
@@ -62,11 +62,9 @@
   </div>
 </div>
 
-<h2 class="h5 mt-4">
-  <%= pluralize(@repair.repair_line_items.size, "service") %> charged
-</h2>
+<h2 class="h5 mt-4"><%= pluralize(@lines.size, "service") %> charged</h2>
 
-<% if @repair.repair_line_items.empty? %>
+<% if @lines.empty? %>
   <p class="text-muted">Nothing charged on this repair yet.</p>
 <% else %>
   <table class="table table-sm">
@@ -78,7 +76,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @repair.repair_line_items.each do |line| %>
+      <% @lines.each do |line| %>
         <tr>
           <td><%= link_to line.service_type.name, line.service_type %></td>
           <td><%= line.discount_note || "-" %></td>
@@ -89,9 +87,7 @@
     <tfoot>
       <tr class="fw-bold">
         <td colspan="2">Total</td>
-        <td class="text-end">
-          <%= money(@repair.repair_line_items.sum(&:price_charged)) %>
-        </td>
+        <td class="text-end"><%= money(@repair.total) %></td>
       </tr>
     </tfoot>
   </table>

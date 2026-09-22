@@ -18,6 +18,18 @@ class Repair < ApplicationRecord
   validate :dates_are_not_before_drop_off
   validate :hand_back_and_answer_match_state
 
+  scope :not_handed_back, -> { not_picked_up }
+  scope :overdue,         -> { not_handed_back.where(promised_on: ...Date.current) }
+  scope :by_promised_day, -> { order(:promised_on, :dropped_off_at) }
+
+  def overdue?
+    !handed_back_state? && promised_on.present? && promised_on < Date.current
+  end
+
+  def total
+    repair_line_items.sum(:price_charged)
+  end
+
   private
 
   def dates_are_not_before_drop_off

@@ -7,14 +7,12 @@
   </div>
 </div>
 
-<h2 class="h5 mt-4">
-  <%= pluralize(@staff_member.assigned_repairs.size, "repair") %> assigned
-</h2>
+<h2 class="h5 mt-4"><%= pluralize(@assigned_repairs.size, "repair") %> assigned</h2>
 
-<% if @staff_member.assigned_repairs.empty? %>
+<% if @assigned_repairs.empty? %>
   <p class="text-muted">No repairs assigned to this person.</p>
 <% else %>
-  <table class="table table-sm">
+  <table class="table table-sm align-middle">
     <thead>
       <tr>
         <th>Bike</th>
@@ -25,19 +23,17 @@
       </tr>
     </thead>
     <tbody>
-      <%= render @staff_member.assigned_repairs %>
+      <%= render @assigned_repairs %>
     </tbody>
   </table>
 <% end %>
 
-<h2 class="h5 mt-4">
-  <%= pluralize(@staff_member.received_repairs.size, "repair") %> received at the counter
-</h2>
+<h2 class="h5 mt-4"><%= pluralize(@received_repairs.size, "repair") %> received at the counter</h2>
 
-<% if @staff_member.received_repairs.empty? %>
+<% if @received_repairs.empty? %>
   <p class="text-muted">This person has not received any repair.</p>
 <% else %>
-  <table class="table table-sm">
+  <table class="table table-sm align-middle">
     <thead>
       <tr>
         <th>Bike</th>
@@ -48,7 +44,7 @@
       </tr>
     </thead>
     <tbody>
-      <%= render @staff_member.received_repairs %>
+      <%= render @received_repairs %>
     </tbody>
   </table>
 <% end %>
