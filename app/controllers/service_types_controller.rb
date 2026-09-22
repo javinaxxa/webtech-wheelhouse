@@ -5,6 +5,6 @@ class ServiceTypesController < ApplicationController
 
   def show
     @service_type = ServiceType.find(params[:id])
-    @lines = @service_type.repair_line_items.in_order_charged
+    @lines = @service_type.repair_line_items.in_order_charged.includes(repair: :bike)
   end
 end
