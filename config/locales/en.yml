@@ -5,10 +5,23 @@ en:
         bikes: "bikes"
       bike:
         repairs: "repairs"
+        serial_number: "Serial number"
       service_type:
+        name: "Service name"
+        current_price: "Price"
         repair_line_items: "charges on repairs"
       staff_member:
         received_repairs: "repairs received at the counter"
+      repair:
+        status: "State"
+        promised_on: "Promised day"
+        dropped_off_at: "Drop-off time"
+        picked_up_at: "Hand-back time"
+        customer_approved: "Customer's answer"
+        received_by: "Staff member who received it"
+      repair_line_item:
+        price_charged: "Price charged"
+        service_type: "Service"
     errors:
       messages:
         restrict_dependent_destroy:
