@@ -18,8 +18,8 @@ Wheelhouse is a repair tracking system for a neighbourhood bicycle repair shop. 
 
 ## Prerequisites
 
-- Ruby 4.0.4
-- Rails 8.0
+- Ruby 3.4.5
+- Rails 8.1
 - Node 26.1.0 and Yarn 1.22 
 - PostgreSQL 17.5, running locally. The application connects using your local system role.
 
