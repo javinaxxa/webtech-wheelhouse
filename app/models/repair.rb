@@ -45,7 +45,7 @@ class Repair < ApplicationRecord
   end
 
   def handed_back_state?
-    picked_up? || declined?
+    picked_up?
   end
 
   def past_the_quote?

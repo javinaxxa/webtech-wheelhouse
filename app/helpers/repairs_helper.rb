@@ -1,27 +1,27 @@
 module RepairsHelper
-  STATUS_COLORS = {
-    "dropped_off"       => "secondary",
-    "awaiting_approval" => "warning",
-    "in_progress"       => "primary",
-    "ready_for_pickup"  => "info",
-    "picked_up"         => "success",
-    "declined"          => "danger"
-  }.freeze
-
-  CLOSED_STATUSES = %w[picked_up declined].freeze
-
   def status_badge(repair)
-    color = STATUS_COLORS.fetch(repair.status, "secondary")
-    tag.span repair.status.humanize, class: "badge text-bg-#{color}"
+    tag.span repair.status.humanize, class: "badge text-bg-#{status_color(repair)}"
   end
 
   def repair_overdue?(repair)
-    return false if CLOSED_STATUSES.include?(repair.status)
+    return false if repair.picked_up?
 
     repair.promised_on < Date.current
   end
 
   def repair_row_class(repair)
     "table-warning" if repair_overdue?(repair)
+  end
+
+  private
+
+  def status_color(repair)
+    if    repair.picked_up?         then "success"
+    elsif repair.declined?          then "danger"
+    elsif repair.ready_for_pickup?  then "info"
+    elsif repair.in_progress?       then "primary"
+    elsif repair.awaiting_approval? then "warning"
+    else                                 "secondary"
+    end
   end
 end

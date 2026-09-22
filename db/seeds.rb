@@ -132,7 +132,7 @@ add_repair(
 add_repair(
   bike: bike4, received_by: antonia, assigned_mechanic: camila_m,
   status: "declined",
-  dropped_off_at: 5.days.ago, promised_on: 3.days.ago, picked_up_at: 4.days.ago,
+  dropped_off_at: 5.days.ago, promised_on: 3.days.ago,
   customer_approved: false, service_by_name: service_by_name,
   services: [["Suspension fork service", nil, nil]]
 )
