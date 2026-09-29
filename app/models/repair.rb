@@ -14,6 +14,10 @@ class Repair < ApplicationRecord
   has_many :repair_line_items, dependent: :destroy
   has_many :service_types, through: :repair_line_items, dependent: :destroy
 
+  accepts_nested_attributes_for :repair_line_items,
+                                reject_if: ->(line) { line[:service_type_id].blank? },
+                                allow_destroy: true
+
   validates :status, :promised_on, :dropped_off_at, presence: true
   validate :dates_are_not_before_drop_off
   validate :hand_back_and_answer_match_state
