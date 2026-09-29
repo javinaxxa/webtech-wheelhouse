@@ -50,3 +50,8 @@
 <% end %>
 
 <%= link_to "All staff", staff_members_path, class: "btn btn-outline-secondary mt-3" %>
+<%= link_to "Edit", edit_staff_member_path(@staff_member), class: "btn btn-outline-primary mt-3" %>
+<%= button_to "Delete", @staff_member, method: :delete,
+    form_class: "d-inline",
+    data: { turbo_confirm: "Delete #{@staff_member.name} from the staff?" },
+    class: "btn btn-outline-danger mt-3" %>

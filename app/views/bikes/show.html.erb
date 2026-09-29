@@ -39,3 +39,9 @@
 <% end %>
 
 <%= link_to "All bikes", bikes_path, class: "btn btn-outline-secondary mt-3" %>
+<%= link_to "Edit", edit_bike_path(@bike), class: "btn btn-outline-primary mt-3" %>
+<%= link_to "Book a repair", new_repair_path(bike_id: @bike.id), class: "btn btn-outline-primary mt-3" %>
+<%= button_to "Delete", @bike, method: :delete,
+    form_class: "d-inline",
+    data: { turbo_confirm: "Delete bike #{@bike.serial_number}?" },
+    class: "btn btn-outline-danger mt-3" %>

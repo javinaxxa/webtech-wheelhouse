@@ -29,3 +29,9 @@
 <% end %>
 
 <%= link_to "All customers", customers_path, class: "btn btn-outline-secondary mt-3" %>
+<%= link_to "Edit", edit_customer_path(@customer), class: "btn btn-outline-primary mt-3" %>
+<%= link_to "Add a bike", new_bike_path(customer_id: @customer.id), class: "btn btn-outline-primary mt-3" %>
+<%= button_to "Delete", @customer, method: :delete,
+    form_class: "d-inline",
+    data: { turbo_confirm: "Delete #{@customer.name} from the customer list?" },
+    class: "btn btn-outline-danger mt-3" %>
