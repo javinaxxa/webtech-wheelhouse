@@ -5,11 +5,11 @@ Rails.application.routes.draw do
   get "visit", to: "pages#visit", as: :visit
   get "about", to: "pages#about", as: :about
 
-  resources :customers,     only: [:index, :show]
-  resources :bikes,         only: [:index, :show]
-  resources :repairs,       only: [:index, :show]
-  resources :service_types, only: [:index, :show]
-  resources :staff_members, only: [:index, :show]
+  resources :customers
+  resources :bikes
+  resources :repairs
+  resources :service_types
+  resources :staff_members
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

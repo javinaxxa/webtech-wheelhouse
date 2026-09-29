@@ -1,0 +1,28 @@
+<%= form_with model: service_type do |f| %>
+  <% if service_type.errors.any? %>
+    <div class="alert alert-danger">
+      <p class="mb-1 fw-bold"><%= pluralize(service_type.errors.count, "problem") %> stopped this from being saved:</p>
+      <ul class="mb-0">
+        <% service_type.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :name, "Service name", class: "form-label" %>
+    <%= f.text_field :name, class: ["form-control", { "is-invalid": service_type.errors[:name].any? }] %>
+    <div class="invalid-feedback"><%= service_type.errors[:name].to_sentence %></div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :current_price, "Price", class: "form-label" %>
+    <%= f.number_field :current_price, step: 1, min: 1,
+        class: ["form-control", { "is-invalid": service_type.errors[:current_price].any? }] %>
+    <div class="invalid-feedback"><%= service_type.errors[:current_price].to_sentence %></div>
+  </div>
+
+  <%= f.submit class: "btn btn-primary" %>
+  <%= link_to "Cancel", service_type.persisted? ? service_type : services_path, class: "btn btn-outline-secondary" %>
+<% end %>

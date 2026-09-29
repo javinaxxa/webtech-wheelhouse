@@ -1,0 +1,3 @@
+<% content_for :title, "Edit #{@bike.make} #{@bike.model}" %>
+<h1 class="h3 mb-4">Edit <%= @bike.make %> <%= @bike.model %></h1>
+<%= render "form", bike: @bike %>
