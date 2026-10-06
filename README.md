@@ -22,6 +22,9 @@ Wheelhouse is a repair tracking system for a neighbourhood bicycle repair shop. 
 - Rails 8.1
 - Node 26.1.0 and Yarn 1.22 
 - PostgreSQL 17.5, running locally. The application connects using your local system role.
+- libvips, which Active Storage uses to generate the thumbnails of the intake photos.
+  On macOS: `brew install vips`. On Debian or Ubuntu: `sudo apt install libvips`.
+  Check it with `vips --version`; without it the repairs index raises when it draws a thumbnail.
 
 ## Setup
 
@@ -44,4 +47,4 @@ bin/dev
 `bin/dev` starts the Rails server and Bootstrap's Sass watcher. The compiled CSS is not
 version-controlled, so `bin/dev` is how the application is meant to be started: `bin/rails server` on its own will boot it, but with no styles.
 
-Then open `http://localhost:3000`. Every page reads from the seeded database: the navbar links to the list of repairs, bikes, customers, services and staff, and each row links to its own page.
+Then open `http://localhost:3000`. Every page reads from the seeded database: the navbar links to the list of repairs, bikes, customers, services and staff, and each row links to its own page. The repairs index shows a thumbnail of the intake photos and the beginning of the diagnosis on each row.
