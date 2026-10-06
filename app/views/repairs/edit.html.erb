@@ -1,3 +1,23 @@
 <% content_for :title, "Edit repair ##{@repair.id}" %>
 <h1 class="h3 mb-4">Edit repair #<%= @repair.id %></h1>
+
+<% if @repair.intake_photos.attached? %>
+  <h2 class="h6">Photos already on this repair</h2>
+  <div class="row g-2 mb-4">
+    <% @repair.intake_photos.each do |photo| %>
+      <div class="col-auto text-center">
+        <%= image_tag photo.variant(:thumb),
+            alt: "Intake photo of the #{@repair.bike.make} #{@repair.bike.model} for repair ##{@repair.id}",
+            class: "img-thumbnail d-block", width: 80, height: 60 %>
+        <%= button_to "Remove",
+            repair_intake_photo_path(@repair, photo),
+            method: :delete,
+            form_class: "d-inline",
+            data: { turbo_confirm: "Remove this photo from repair ##{@repair.id}?" },
+            class: "btn btn-sm btn-outline-danger mt-1" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
 <%= render "form", repair: @repair %>

@@ -7,7 +7,9 @@ Rails.application.routes.draw do
 
   resources :customers
   resources :bikes
-  resources :repairs
+  resources :repairs do
+    resources :intake_photos, only: [:destroy], module: :repairs
+  end
   resources :service_types
   resources :staff_members
 

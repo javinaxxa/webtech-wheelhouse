@@ -63,12 +63,15 @@ class RepairsController < ApplicationController
   end
 
   def repair_params
-    params.expect(repair: [:bike_id, :received_by_id, :assigned_mechanic_id, :status,
-                           :promised_on, :dropped_off_at, :completed_at, :picked_up_at,
-                           :customer_approved, :diagnosis,
-                           intake_photos: [],
-                           repair_line_items_attributes: [[:id, :service_type_id,
-                                                          :price_charged, :discount_note,
-                                                          :_destroy]]])
+    attrs = params.expect(repair: [:bike_id, :received_by_id, :assigned_mechanic_id, :status,
+                                   :promised_on, :dropped_off_at, :completed_at, :picked_up_at,
+                                   :customer_approved, :diagnosis,
+                                   intake_photos: [],
+                                   repair_line_items_attributes: [[:id, :service_type_id,
+                                                                  :price_charged, :discount_note,
+                                                                  :_destroy]]])
+
+    photos = Array(attrs[:intake_photos]).reject(&:blank?)
+    photos.any? ? attrs.merge(intake_photos: photos) : attrs.except(:intake_photos)
   end
 end

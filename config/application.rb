@@ -16,6 +16,10 @@ module WebtechWheelhouse
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    # Attaching photos on the edit form adds them to the ones the repair has,
+    # and submitting the form with an empty file field leaves them untouched.
+    config.active_storage.replace_on_assign_to_many = false
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
