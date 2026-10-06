@@ -6,7 +6,10 @@ class BikesController < ApplicationController
   end
 
   def show
-    @repairs = @bike.repairs.by_promised_day.includes(bike: :customer)
+    @repairs = @bike.repairs.by_promised_day
+                    .includes(:rich_text_diagnosis,
+                              { intake_photos_attachments: { blob: :variant_records } },
+                              bike: :customer)
   end
 
   def new
@@ -47,7 +50,7 @@ class BikesController < ApplicationController
   private
 
   def set_bike
-    @bike = Bike.find(params[:id])
+    @bike = Bike.includes(:customer).find(params[:id])
   end
 
   def bike_params

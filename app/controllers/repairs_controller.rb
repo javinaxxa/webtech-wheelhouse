@@ -3,8 +3,11 @@ class RepairsController < ApplicationController
 
   BLANK_LINES = 3
 
+  PHOTO_PRELOAD = { intake_photos_attachments: { blob: :variant_records } }.freeze
+
   def index
-    @repairs = Repair.by_promised_day.includes(bike: :customer)
+    @repairs = Repair.by_promised_day
+                     .includes(:rich_text_diagnosis, PHOTO_PRELOAD, bike: :customer)
   end
 
   def show
@@ -53,7 +56,7 @@ class RepairsController < ApplicationController
   private
 
   def set_repair
-    @repair = Repair.find(params[:id])
+    @repair = Repair.includes(:rich_text_diagnosis, PHOTO_PRELOAD).find(params[:id])
   end
 
   def pad_blank_lines
