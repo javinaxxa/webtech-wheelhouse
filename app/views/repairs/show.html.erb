@@ -76,7 +76,7 @@
 
 <% if @repair.intake_photos.attached? %>
   <div class="row g-3">
-    <% @repair.intake_photos.each do |photo| %>
+    <% @repair.intake_photos.select { |photo| photo.persisted? && photo.variable? }.each do |photo| %>
       <div class="col-6 col-md-4">
         <figure class="figure">
           <%= link_to url_for(photo), target: "_blank", rel: "noopener" do %>

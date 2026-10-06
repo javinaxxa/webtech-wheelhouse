@@ -4,7 +4,7 @@
 <% if @repair.intake_photos.attached? %>
   <h2 class="h6">Photos already on this repair</h2>
   <div class="row g-2 mb-4">
-    <% @repair.intake_photos.each do |photo| %>
+    <% @repair.intake_photos.select { |photo| photo.persisted? && photo.variable? }.each do |photo| %>
       <div class="col-auto text-center">
         <%= image_tag photo.variant(:thumb),
             alt: "Intake photo of the #{@repair.bike.make} #{@repair.bike.model} for repair ##{@repair.id}",
