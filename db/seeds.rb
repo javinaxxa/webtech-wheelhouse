@@ -250,3 +250,55 @@ add_repair(
 puts "Seeded: #{ServiceType.count} services, #{StaffMember.count} staff, " \
      "#{Customer.count} customers, #{Bike.count} bikes, #{Repair.count} repairs, " \
      "#{RepairLineItem.count} line items."
+# Intake photos and diagnoses
+
+photo_dir = Rails.root.join("db/seeds/photos")
+photo_files = %w[bike-1.jpg bike-2.jpg bike-3.jpg].map { |name| photo_dir.join(name) }
+
+def attach_photos(repair, files)
+  files.each_with_index do |path, index|
+    repair.intake_photos.attach(
+      io: File.open(path),
+      filename: "repair-#{repair.id}-#{index + 1}.jpg",
+      content_type: "image/jpeg"
+    )
+  end
+end
+
+diagnoses = [
+  "<div>Chain and cassette worn past the service limit.</div>" \
+  "<ul><li><strong>Chain</strong> stretched beyond 0.75%</li>" \
+  "<li>Cassette teeth hooked on the three smallest sprockets</li></ul>",
+
+  "<div>Front brake pulls to one side.</div>" \
+  "<ul><li><strong>Calliper</strong> not centred on the rotor</li>" \
+  "<li>Pads worn unevenly, left side almost gone</li></ul>",
+
+  "<div>Rear wheel out of true after a kerb strike.</div>" \
+  "<ul><li><strong>Two spokes</strong> loose on the drive side</li>" \
+  "<li>Rim still within tolerance, no flat spot</li></ul>",
+
+  "<div>Gears skip under load on the middle sprockets.</div>" \
+  "<ul><li><strong>Cable</strong> frayed where it enters the shifter</li>" \
+  "<li>Hanger slightly bent</li></ul>",
+
+  "<div>Bottom bracket creaks when pedalling hard.</div>" \
+  "<ul><li><strong>Bearings</strong> rough on one side</li>" \
+  "<li>Cups need regreasing</li></ul>"
+]
+
+repairs = Repair.order(:id).to_a
+
+# Ten repairs with photos: the first one gets four, the rest one or two.
+repairs[0]&.then { |r| attach_photos(r, [photo_files[0], photo_files[1], photo_files[2], photo_files[0]]) }
+repairs[1..9].to_a.each_with_index do |repair, index|
+  attach_photos(repair, [photo_files[index % 3]])
+end
+
+# Twelve repairs with a formatted diagnosis; the last two stay empty.
+repairs.first(12).each_with_index do |repair, index|
+  repair.update!(diagnosis: diagnoses[index % diagnoses.size])
+end
+
+puts "Attached photos to #{Repair.joins(:intake_photos_attachments).distinct.count} repairs, " \
+     "wrote #{ActionText::RichText.count} diagnoses."
