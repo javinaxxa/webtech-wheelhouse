@@ -8,6 +8,16 @@ class Repair < ApplicationRecord
     declined: "declined"
   }
 
+  PHOTO_TYPES = %w[image/jpeg image/png image/heic image/webp].freeze
+  PHOTO_SIZE_LIMIT = 10.megabytes
+
+  has_many_attached :intake_photos do |attachable|
+    attachable.variant :thumb,  resize_to_fill: [160, 120]
+    attachable.variant :medium, resize_to_limit: [600, 600]
+  end
+
+  has_rich_text :diagnosis
+
   belongs_to :bike
   belongs_to :received_by, class_name: "StaffMember"
   belongs_to :assigned_mechanic, class_name: "StaffMember", optional: true
@@ -21,6 +31,7 @@ class Repair < ApplicationRecord
   validates :status, :promised_on, :dropped_off_at, presence: true
   validate :dates_are_not_before_drop_off
   validate :hand_back_and_answer_match_state
+  validate :intake_photos_are_images_within_the_size_limit
 
   scope :not_handed_back, -> { not_picked_up }
   scope :overdue,         -> { not_handed_back.where(promised_on: ...Date.current) }
@@ -57,6 +68,21 @@ class Repair < ApplicationRecord
 
     if past_the_quote? && customer_approved.nil?
       errors.add(:customer_approved, "must be recorded once the repair is past the quote")
+    end
+  end
+
+  def intake_photos_are_images_within_the_size_limit
+    intake_photos.each do |photo|
+      next unless photo.new_record?
+
+      unless PHOTO_TYPES.include?(photo.blob.content_type)
+        errors.add(:intake_photos, "#{photo.blob.filename} is not a JPEG, PNG, HEIC or WebP photo")
+      end
+
+      if photo.blob.byte_size > PHOTO_SIZE_LIMIT
+        errors.add(:intake_photos,
+                   "#{photo.blob.filename} is larger than #{PHOTO_SIZE_LIMIT / 1.megabyte} MB")
+      end
     end
   end
 
