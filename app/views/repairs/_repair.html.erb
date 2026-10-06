@@ -1,7 +1,23 @@
 <tr class="<%= repair_row_class(repair) %>">
+  <td style="width: 160px">
+    <% if repair.intake_photos.attached? %>
+      <%= image_tag repair.intake_photos.first.variant(:thumb),
+          alt: "Intake photo of the #{repair.bike.make} #{repair.bike.model} for repair ##{repair.id}",
+          class: "img-thumbnail",
+          width: 80, height: 60 %>
+    <% else %>
+      <span class="d-inline-block bg-body-secondary rounded text-center text-muted small"
+            style="width: 80px; height: 60px; line-height: 60px">No photo</span>
+    <% end %>
+  </td>
   <td><%= link_to "#{repair.bike.make} #{repair.bike.model}", repair.bike %></td>
   <td><%= link_to repair.bike.customer.name, repair.bike.customer %></td>
   <td><%= status_badge(repair) %></td>
   <td><%= l(repair.promised_on, format: :long) %></td>
+  <td class="text-muted small" style="max-width: 20rem">
+    <span class="d-inline-block text-truncate" style="max-width: 100%">
+      <%= repair.diagnosis.present? ? repair.diagnosis.to_plain_text.truncate(80) : "No diagnosis yet" %>
+    </span>
+  </td>
   <td><%= link_to "Detail", repair, class: "btn btn-sm btn-outline-secondary" %></td>
 </tr>
