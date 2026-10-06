@@ -76,6 +76,23 @@
     </div>
   </div>
 
+  <div class="mb-3">
+    <%= f.label :diagnosis, "Diagnosis", class: "form-label" %>
+    <%= f.rich_textarea :diagnosis %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :intake_photos, "Intake photos", class: "form-label" %>
+    <%= f.file_field :intake_photos, multiple: true,
+        accept: Repair::PHOTO_TYPES.join(","),
+        class: ["form-control", { "is-invalid": repair.errors[:intake_photos].any? }] %>
+    <div class="invalid-feedback"><%= repair.errors[:intake_photos].to_sentence %></div>
+    <div class="form-text">
+      JPEG, PNG, HEIC or WebP, up to <%= Repair::PHOTO_SIZE_LIMIT / 1.megabyte %> MB each.
+      Choosing files adds them to the ones already on the repair.
+    </div>
+  </div>
+
   <h2 class="h5 mt-4">Services charged</h2>
   <p class="text-muted small">Leave the service blank to skip a line. Tick "remove" to take a line off.</p>
 
