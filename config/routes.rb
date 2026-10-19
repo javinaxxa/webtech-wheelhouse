@@ -13,5 +13,12 @@ Rails.application.routes.draw do
   resources :service_types
   resources :staff_members
 
+  namespace :api do
+    namespace :v1 do
+      resources :services, only: [:index, :show, :create]
+      resources :repairs, only: [:index, :show]
+    end
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 end

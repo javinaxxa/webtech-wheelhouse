@@ -66,3 +66,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# Cross-origin requests from the shop website that reads the API.
+gem "rack-cors"
