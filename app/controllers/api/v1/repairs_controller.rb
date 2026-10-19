@@ -46,7 +46,7 @@ module Api
           handed_back_at: repair.picked_up_at&.iso8601,
           customer_approved: repair.customer_approved,
           overdue: repair.overdue?,
-          total: format("%.0f", repair.total),
+          total: format("%.0f", repair.repair_line_items.sum(&:price_charged)),
           bike: {
             make: repair.bike.make,
             model: repair.bike.model,
