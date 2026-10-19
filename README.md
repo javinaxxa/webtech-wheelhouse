@@ -48,3 +48,59 @@ bin/dev
 version-controlled, so `bin/dev` is how the application is meant to be started: `bin/rails server` on its own will boot it, but with no styles.
 
 Then open `http://localhost:3000`. Every page reads from the seeded database: the navbar links to the list of repairs, bikes, customers, services and staff, and each row links to its own page. The repairs index shows a thumbnail of the intake photos and the beginning of the diagnosis on each row.
+
+## The JSON API
+
+Wheelhouse answers two programs that are not a browser: the shop's website, which shows the price
+list, and the accounting program, which reads the repairs. The routes, the documents and the
+decisions behind them are in [`docs/api.md`](docs/api.md).
+
+### The token
+
+Reading the repairs and creating a service need a bearer token. It lives in the encrypted
+credentials of the application, under `api.token`, so it is never in the code or in the repository.
+
+On a fresh clone you set your own:
+
+```bash
+bin/rails credentials:edit
+```
+
+and add, at the end of the file that opens:
+
+```yaml
+api:
+  token: <a long random string of your own>
+```
+
+`bin/rails runner 'puts SecureRandom.hex(32)'` prints one. Without `config/master.key`, which is not
+committed, the credentials cannot be read: generate the file again with your own token.
+
+### Asking the API from the terminal
+
+The price list is public:
+
+```bash
+curl http://localhost:3000/api/v1/services
+```
+
+The repairs need the token:
+
+```bash
+curl -H "Authorization: Bearer <your token>" http://localhost:3000/api/v1/repairs
+```
+
+### The page that reads it
+
+The price list is also on my personal page:
+[javinaxxa.github.io/webtech-lab-01](https://javinaxxa.github.io/webtech-lab-01/), under
+"Wheelhouse price list". It reads this API with `fetch`, so the application has to be running on
+**port 3000** for the section to show anything; otherwise it says the shop's server is offline.
+
+The API allows that page's origin and a local server on port 8000, and no other. To serve the page
+while developing:
+
+```bash
+cd ../webtech-lab-01
+python3 -m http.server 8000
+```
