@@ -3,6 +3,7 @@ class StaffMember < ApplicationRecord
                               dependent: :restrict_with_error
   has_many :assigned_repairs, class_name: "Repair", foreign_key: :assigned_mechanic_id,
                               dependent: :nullify
+  has_one :user, dependent: :restrict_with_error
 
   validates :name, :role, presence: true
 
