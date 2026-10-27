@@ -29,6 +29,15 @@
         <% end %>
       </dd>
 
+<dt class="col-sm-3">Taken in by</dt>
+<dd class="col-sm-9">
+  <% if @repair.taken_in_by %>
+    <%= @repair.taken_in_by.display_name %>
+  <% else %>
+    <span class="text-muted">Before accounts existed</span>
+  <% end %>
+</dd>
+
       <dt class="col-sm-3">Dropped off</dt>
       <dd class="col-sm-9"><%= l(@repair.dropped_off_at, format: :long) %></dd>
 

@@ -7,7 +7,7 @@ class RepairsController < ApplicationController
 
   def index
     @repairs = Repair.by_promised_day
-                     .includes(:rich_text_diagnosis, PHOTO_PRELOAD, bike: :customer)
+                     .includes(:rich_text_diagnosis, :taken_in_by, PHOTO_PRELOAD, bike: :customer)
   end
 
   def show
@@ -25,6 +25,7 @@ class RepairsController < ApplicationController
 
   def create
     @repair = Repair.new(repair_params)
+    @repair.taken_in_by = Current.user
 
     if @repair.save
       redirect_to @repair, notice: "Repair ##{@repair.id} for #{@repair.bike.serial_number} was booked in."
@@ -56,7 +57,7 @@ class RepairsController < ApplicationController
   private
 
   def set_repair
-    @repair = Repair.includes(:rich_text_diagnosis, PHOTO_PRELOAD).find(params[:id])
+    @repair = Repair.includes(:rich_text_diagnosis, :taken_in_by, PHOTO_PRELOAD).find(params[:id])
   end
 
   def pad_blank_lines

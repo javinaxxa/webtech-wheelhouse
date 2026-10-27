@@ -19,6 +19,7 @@ class Repair < ApplicationRecord
   has_rich_text :diagnosis
 
   belongs_to :bike
+  belongs_to :taken_in_by, class_name: "User", optional: true
   belongs_to :received_by, class_name: "StaffMember"
   belongs_to :assigned_mechanic, class_name: "StaffMember", optional: true
   has_many :repair_line_items, dependent: :destroy

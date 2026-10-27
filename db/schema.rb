@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_234826) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_003111) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -93,10 +93,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_234826) do
     t.date "promised_on", null: false
     t.bigint "received_by_id", null: false
     t.string "status", default: "dropped_off", null: false
+    t.bigint "taken_in_by_id"
     t.datetime "updated_at", null: false
     t.index ["assigned_mechanic_id"], name: "index_repairs_on_assigned_mechanic_id"
     t.index ["bike_id"], name: "index_repairs_on_bike_id"
     t.index ["received_by_id"], name: "index_repairs_on_received_by_id"
+    t.index ["taken_in_by_id"], name: "index_repairs_on_taken_in_by_id"
   end
 
   create_table "service_types", force: :cascade do |t|
@@ -142,6 +144,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_234826) do
   add_foreign_key "repairs", "bikes"
   add_foreign_key "repairs", "staff_members", column: "assigned_mechanic_id"
   add_foreign_key "repairs", "staff_members", column: "received_by_id"
+  add_foreign_key "repairs", "users", column: "taken_in_by_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "users", "staff_members"
 end
