@@ -41,6 +41,7 @@ rodrigo = StaffMember.create!(name: "Rodrigo Fuentes", role: "mechanic")
 pablo   = StaffMember.create!(name: "Pablo Vidal",     role: "mechanic")
 camila_m = StaffMember.create!(name: "Camila Ríos",    role: "mechanic")
 antonia = StaffMember.create!(name: "Antonia Silva",   role: "front_desk")
+marcela = StaffMember.create!(name: "Marcela Ayala",  role: "owner")
 
 
 # Customers 
@@ -302,3 +303,37 @@ end
 
 puts "Attached photos to #{Repair.joins(:intake_photos_attachments).distinct.count} repairs, " \
      "wrote #{ActionText::RichText.count} diagnoses."
+
+# Accounts
+
+accounts = {
+  marcela => { email: "marcela@wheelhouse.cl", password: "tallerdelbarrio", role: :owner },
+  antonia => { email: "antonia@wheelhouse.cl", password: "mostradorlunes", role: :counter },
+  rodrigo => { email: "rodrigo@wheelhouse.cl", password: "cadenayplato25", role: :mechanic },
+  pablo   => { email: "pablo@wheelhouse.cl",   password: "frenoshidraulicos", role: :mechanic },
+  camila_m => { email: "camila@wheelhouse.cl", password: "ruedascentradas", role: :mechanic }
+}
+
+accounts.each do |staff_member, details|
+  User.create!(
+    email_address: details[:email],
+    password: details[:password],
+    password_confirmation: details[:password],
+    role: details[:role],
+    staff_member: staff_member
+  )
+end
+
+# One account belongs to no member of the staff, and keeps the default role.
+User.create!(
+  email_address: "nuevo@wheelhouse.cl",
+  password: "reciencontratado",
+  password_confirmation: "reciencontratado"
+)
+
+# Every repair records the account that took it in, except the two oldest ones.
+counter_account = User.find_by!(email_address: "antonia@wheelhouse.cl")
+Repair.order(:id).offset(2).update_all(taken_in_by_id: counter_account.id)
+
+puts "Accounts: #{User.count} (#{User.group(:role).count.map { |r, n| "#{n} #{r}" }.join(', ')}). " \
+     "Repairs with an account: #{Repair.where.not(taken_in_by_id: nil).count} of #{Repair.count}."
