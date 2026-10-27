@@ -12,6 +12,7 @@ en:
         repair_line_items: "charges on repairs"
       staff_member:
         received_repairs: "repairs received at the counter"
+        user: "account"
       repair:
         status: "State"
         promised_on: "Promised day"
@@ -26,3 +27,4 @@ en:
       messages:
         restrict_dependent_destroy:
           has_many: "Can't be deleted because it still has %{record} on file"
+          has_one: "Can't be deleted because it still has %{record} on file"
