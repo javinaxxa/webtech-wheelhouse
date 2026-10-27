@@ -104,3 +104,35 @@ while developing:
 cd ../webtech-lab-01
 python3 -m http.server 8000
 ```
+
+## Signing in
+
+Every page needs an account, except the price list, signing in, signing up and the pages of a
+forgotten password. The accounts of the seed exist **only in development**, with these passwords:
+
+| Email address | Role | Password | Member of staff |
+|---|---|---|---|
+| `marcela@wheelhouse.cl` | owner | `tallerdelbarrio` | Marcela Ayala |
+| `antonia@wheelhouse.cl` | counter | `mostradorlunes` | Antonia Silva |
+| `rodrigo@wheelhouse.cl` | mechanic | `cadenayplato25` | Rodrigo Fuentes |
+| `pablo@wheelhouse.cl` | mechanic | `frenoshidraulicos` | Pablo Vidal |
+| `camila@wheelhouse.cl` | mechanic | `ruedascentradas` | Camila Ríos |
+| `nuevo@wheelhouse.cl` | mechanic | `reciencontratado` | none |
+
+Signing up from the browser creates an account with the role `mechanic`, the one with the fewest
+permissions. The reason is in [`docs/decisions.md`](docs/decisions.md). Changing a role, or joining
+an account to a member of the staff, is done from the console or the seed: no page lists or edits
+accounts.
+
+## Where the emails go
+
+The application sends two emails: a welcome message when an account is created, and a link when
+somebody forgets their password. In development **no email leaves the machine and no mail provider
+is used**. Each one is written to a file instead:
+
+```
+tmp/mails/<the email address it was sent to>
+```
+
+Open that file to read the message and to follow the link of a password reset. The emails are also
+rendered in the browser at `http://localhost:3000/rails/mailers`.

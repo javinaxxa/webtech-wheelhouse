@@ -21,3 +21,18 @@ another doing the work? I assumed one mechanic per repair, so `repairs.assigned_
 single column, matching "each mechanic keeps their own notes." If handoffs are allowed, a single
 foreign key could not represent that — it would need to become a `repair_assignments` join table
 with `repair_id`, `staff_member_id`, `started_at` and `ended_at`, so more than one mechanic could be linked to the same repair, each for their own stretch of it.
+
+## The default role of an account
+
+A new account gets the role **mechanic**, which is the one with the fewest permissions in the
+workshop.
+
+Of the three roles, the mechanic touches the least: they diagnose a bike and record the work they
+did on it. The person at the counter does more — they take bikes in, open a repair, add customers
+and their bikes, and quote a price before any work starts — and the owner does everything, including
+setting the price list.
+
+So an account that nobody has looked at yet, created by somebody who signed up on their own, starts
+at the bottom: it can see the workshop but it is not the account that writes prices or takes money.
+Raising it to `counter` or `owner` is a deliberate act, done from the console or the seed, by
+somebody who already has an account.
