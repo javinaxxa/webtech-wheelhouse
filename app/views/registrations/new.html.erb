@@ -1,0 +1,45 @@
+<% content_for :title, "Create an account" %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h1 class="h3 mb-4">Create an account</h1>
+
+    <%= form_with model: @user, url: registration_path do |f| %>
+      <% if @user.errors.any? %>
+        <div class="alert alert-danger">
+          <p class="mb-1 fw-bold"><%= pluralize(@user.errors.count, "problem") %> stopped this from being saved:</p>
+          <ul class="mb-0">
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= f.label :email_address, "Email address", class: "form-label" %>
+        <%= f.email_field :email_address, required: true, autofocus: true, autocomplete: "username",
+            class: ["form-control", { "is-invalid": @user.errors[:email_address].any? }] %>
+        <div class="invalid-feedback"><%= @user.errors[:email_address].to_sentence %></div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :password, class: "form-label" %>
+        <%= f.password_field :password, required: true, autocomplete: "new-password",
+            class: ["form-control", { "is-invalid": @user.errors[:password].any? }] %>
+        <div class="invalid-feedback"><%= @user.errors[:password].to_sentence %></div>
+        <div class="form-text">At least <%= User::MINIMUM_PASSWORD_LENGTH %> characters.</div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :password_confirmation, "Confirm password", class: "form-label" %>
+        <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password",
+            class: ["form-control", { "is-invalid": @user.errors[:password_confirmation].any? }] %>
+        <div class="invalid-feedback"><%= @user.errors[:password_confirmation].to_sentence %></div>
+      </div>
+
+      <%= f.submit "Create account", class: "btn btn-primary" %>
+      <%= link_to "Sign in instead", new_session_path, class: "btn btn-outline-secondary" %>
+    <% end %>
+  </div>
+</div>

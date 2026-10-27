@@ -1,4 +1,14 @@
-You can reset your password on
+Reset your Wheelhouse password
+
+Somebody asked for a new password for <%= @user.email_address %> at Wheelhouse,
+the workshop's repair tracking system.
+
+Choose a new password here:
 <%= edit_password_url(@user.password_reset_token) %>
 
-This link will expire in <%= distance_of_time_in_words(0, @user.password_reset_token_expires_in) %>.
+The link expires in <%= distance_of_time_in_words(0, @user.password_reset_token_expires_in) %>,
+and stops working once the password is changed.
+
+If this was not you, ignore this message: the password has not changed.
+
+-- Wheelhouse
