@@ -1,4 +1,6 @@
 class ServiceTypesController < ApplicationController
+  allow_unauthenticated_access only: [:index, :show]
+
   before_action :set_service_type, only: [:show, :edit, :update, :destroy]
 
   def index
