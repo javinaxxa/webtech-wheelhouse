@@ -11,6 +11,7 @@
   <% end %>
 
   <div class="row">
+    <% if policy(repair).permitted_attributes.include?(:bike_id) %>
     <div class="col-md-6 mb-3">
       <%= f.label :bike_id, "Bike", class: "form-label" %>
       <%= f.collection_select :bike_id, Bike.by_make_and_model.includes(:customer), :id,
@@ -19,6 +20,7 @@
           class: ["form-select", { "is-invalid": repair.errors[:bike].any? }] %>
       <div class="invalid-feedback"><%= repair.errors[:bike].to_sentence %></div>
     </div>
+    <% end %>
 
     <div class="col-md-6 mb-3">
       <%= f.label :status, "State", class: "form-label" %>
@@ -27,6 +29,7 @@
       <div class="invalid-feedback"><%= repair.errors[:status].to_sentence %></div>
     </div>
 
+    <% if policy(repair).permitted_attributes.include?(:received_by_id) %>
     <div class="col-md-6 mb-3">
       <%= f.label :received_by_id, "Received by", class: "form-label" %>
       <%= f.collection_select :received_by_id, StaffMember.by_role_and_name, :id, :name,
@@ -34,39 +37,51 @@
           class: ["form-select", { "is-invalid": repair.errors[:received_by].any? }] %>
       <div class="invalid-feedback"><%= repair.errors[:received_by].to_sentence %></div>
     </div>
+    <% end %>
 
+    <% if policy(repair).permitted_attributes.include?(:assigned_mechanic_id) %>
     <div class="col-md-6 mb-3">
       <%= f.label :assigned_mechanic_id, "Mechanic", class: "form-label" %>
       <%= f.collection_select :assigned_mechanic_id, StaffMember.by_role_and_name, :id, :name,
           { include_blank: "Not assigned yet" }, class: "form-select" %>
     </div>
+    <% end %>
 
+    <% if policy(repair).permitted_attributes.include?(:dropped_off_at) %>
     <div class="col-md-6 mb-3">
       <%= f.label :dropped_off_at, "Dropped off", class: "form-label" %>
       <%= f.datetime_field :dropped_off_at,
           class: ["form-control", { "is-invalid": repair.errors[:dropped_off_at].any? }] %>
       <div class="invalid-feedback"><%= repair.errors[:dropped_off_at].to_sentence %></div>
     </div>
+    <% end %>
 
+    <% if policy(repair).permitted_attributes.include?(:promised_on) %>
     <div class="col-md-6 mb-3">
       <%= f.label :promised_on, "Promised day", class: "form-label" %>
       <%= f.date_field :promised_on,
           class: ["form-control", { "is-invalid": repair.errors[:promised_on].any? }] %>
       <div class="invalid-feedback"><%= repair.errors[:promised_on].to_sentence %></div>
     </div>
+    <% end %>
 
+    <% if policy(repair).permitted_attributes.include?(:completed_at) %>
     <div class="col-md-6 mb-3">
       <%= f.label :completed_at, "Completed", class: "form-label" %>
       <%= f.datetime_field :completed_at, class: "form-control" %>
     </div>
+    <% end %>
 
+    <% if policy(repair).permitted_attributes.include?(:picked_up_at) %>
     <div class="col-md-6 mb-3">
       <%= f.label :picked_up_at, "Handed back", class: "form-label" %>
       <%= f.datetime_field :picked_up_at,
           class: ["form-control", { "is-invalid": repair.errors[:picked_up_at].any? }] %>
       <div class="invalid-feedback"><%= repair.errors[:picked_up_at].to_sentence %></div>
     </div>
+    <% end %>
 
+    <% if policy(repair).permitted_attributes.include?(:customer_approved) %>
     <div class="col-md-6 mb-3">
       <%= f.label :customer_approved, "Customer's answer", class: "form-label" %>
       <%= f.select :customer_approved,
@@ -74,6 +89,7 @@
           class: ["form-select", { "is-invalid": repair.errors[:customer_approved].any? }] %>
       <div class="invalid-feedback"><%= repair.errors[:customer_approved].to_sentence %></div>
     </div>
+    <% end %>
   </div>
 
   <div class="mb-3">
@@ -93,6 +109,7 @@
     </div>
   </div>
 
+  <% if policy(repair).permitted_attributes.any? { |a| a.is_a?(Hash) && a.key?(:repair_line_items_attributes) } %>
   <h2 class="h5 mt-4">Services charged</h2>
   <p class="text-muted small">Leave the service blank to skip a line. Tick "remove" to take a line off.</p>
 
@@ -132,6 +149,8 @@
       <% end %>
     </tbody>
   </table>
+
+  <% end %>
 
   <%= f.submit class: "btn btn-primary" %>
   <%= link_to "Cancel", repair.persisted? ? repair : repairs_path, class: "btn btn-outline-secondary" %>
