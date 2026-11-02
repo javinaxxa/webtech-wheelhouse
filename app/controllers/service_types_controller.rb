@@ -1,5 +1,9 @@
 class ServiceTypesController < ApplicationController
   allow_unauthenticated_access only: [:index, :show]
+
+  # The price list is open, but if somebody is signed in the navigation bar
+  # and the buttons should know it.
+  before_action :resume_session, only: [:index, :show]
   before_action :set_service_type, only: [:show, :edit, :update, :destroy]
 
   def index
