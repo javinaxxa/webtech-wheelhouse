@@ -1,4 +1,8 @@
 class RegistrationsController < ApplicationController
+  # Authentication and the static pages have no model and no policy; they are
+  # listed in docs/decisions.md with the reason they are open.
+  skip_after_action :verify_authorized, :verify_policy_scoped
+
   allow_unauthenticated_access only: [:new, :create]
 
   def new

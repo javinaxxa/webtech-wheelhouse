@@ -3,6 +3,8 @@ module Repairs
     before_action :set_repair
 
     def destroy
+      authorize @repair, :update?
+
       photo = @repair.intake_photos.find(params[:id])
       photo.purge
 
@@ -13,7 +15,7 @@ module Repairs
     private
 
     def set_repair
-      @repair = Repair.find(params[:repair_id])
+      @repair = policy_scope(Repair).find(params[:repair_id])
     end
   end
 end

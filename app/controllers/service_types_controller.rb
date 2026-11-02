@@ -1,25 +1,28 @@
 class ServiceTypesController < ApplicationController
   allow_unauthenticated_access only: [:index, :show]
-
   before_action :set_service_type, only: [:show, :edit, :update, :destroy]
 
   def index
-    @service_types = ServiceType.by_name
+    @service_types = policy_scope(ServiceType).by_name
   end
 
   def show
+    authorize @service_type
     @lines = @service_type.repair_line_items.in_order_charged.includes(repair: :bike)
   end
 
   def new
     @service_type = ServiceType.new
+    authorize @service_type
   end
 
   def edit
+    authorize @service_type
   end
 
   def create
-    @service_type = ServiceType.new(service_type_params)
+    @service_type = ServiceType.new(permitted_attributes(ServiceType.new))
+    authorize @service_type
 
     if @service_type.save
       redirect_to @service_type, notice: "#{@service_type.name} was added to the price list."
@@ -29,7 +32,9 @@ class ServiceTypesController < ApplicationController
   end
 
   def update
-    if @service_type.update(service_type_params)
+    authorize @service_type
+
+    if @service_type.update(permitted_attributes(@service_type))
       redirect_to @service_type, notice: "#{@service_type.name} was updated."
     else
       render :edit, status: :unprocessable_content
@@ -37,6 +42,8 @@ class ServiceTypesController < ApplicationController
   end
 
   def destroy
+    authorize @service_type
+
     if @service_type.destroy
       redirect_to service_types_path, status: :see_other,
                   notice: "#{@service_type.name} was removed from the price list."
@@ -50,9 +57,5 @@ class ServiceTypesController < ApplicationController
 
   def set_service_type
     @service_type = ServiceType.find(params[:id])
-  end
-
-  def service_type_params
-    params.expect(service_type: [:name, :current_price])
   end
 end

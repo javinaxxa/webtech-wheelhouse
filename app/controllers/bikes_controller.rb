@@ -2,25 +2,30 @@ class BikesController < ApplicationController
   before_action :set_bike, only: [:show, :edit, :update, :destroy]
 
   def index
-    @bikes = Bike.by_make_and_model.includes(:customer, :repairs)
+    @bikes = policy_scope(Bike).by_make_and_model.includes(:customer, :repairs)
   end
 
   def show
-    @repairs = @bike.repairs.by_promised_day
-                    .includes(:rich_text_diagnosis,
-                              { intake_photos_attachments: { blob: :variant_records } },
-                              bike: :customer)
+    authorize @bike
+    @repairs = policy_scope(Repair).where(bike: @bike)
+                                   .by_promised_day
+                                   .includes(:rich_text_diagnosis, :taken_in_by,
+                                             { intake_photos_attachments: { blob: :variant_records } },
+                                             bike: :customer)
   end
 
   def new
     @bike = Bike.new(customer_id: params[:customer_id])
+    authorize @bike
   end
 
   def edit
+    authorize @bike
   end
 
   def create
-    @bike = Bike.new(bike_params)
+    @bike = Bike.new(permitted_attributes(Bike.new))
+    authorize @bike
 
     if @bike.save
       redirect_to @bike, notice: "Bike #{@bike.serial_number} was added for #{@bike.customer.name}."
@@ -30,7 +35,9 @@ class BikesController < ApplicationController
   end
 
   def update
-    if @bike.update(bike_params)
+    authorize @bike
+
+    if @bike.update(permitted_attributes(@bike))
       redirect_to @bike, notice: "Bike #{@bike.serial_number} was updated."
     else
       render :edit, status: :unprocessable_content
@@ -38,6 +45,8 @@ class BikesController < ApplicationController
   end
 
   def destroy
+    authorize @bike
+
     if @bike.destroy
       redirect_to bikes_path, status: :see_other,
                   notice: "Bike #{@bike.serial_number} was removed."
@@ -51,9 +60,5 @@ class BikesController < ApplicationController
 
   def set_bike
     @bike = Bike.includes(:customer).find(params[:id])
-  end
-
-  def bike_params
-    params.expect(bike: [:customer_id, :make, :model, :color, :serial_number])
   end
 end

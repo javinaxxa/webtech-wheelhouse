@@ -6,25 +6,30 @@ class RepairsController < ApplicationController
   PHOTO_PRELOAD = { intake_photos_attachments: { blob: :variant_records } }.freeze
 
   def index
-    @repairs = Repair.by_promised_day
-                     .includes(:rich_text_diagnosis, :taken_in_by, PHOTO_PRELOAD, bike: :customer)
+    @repairs = policy_scope(Repair).by_promised_day
+                                   .includes(:rich_text_diagnosis, :taken_in_by,
+                                             PHOTO_PRELOAD, bike: :customer)
   end
 
   def show
+    authorize @repair
     @lines = @repair.repair_line_items.in_order_charged.includes(:service_type)
   end
 
   def new
     @repair = Repair.new(bike_id: params[:bike_id], dropped_off_at: Time.current)
+    authorize @repair
     BLANK_LINES.times { @repair.repair_line_items.build }
   end
 
   def edit
+    authorize @repair
     BLANK_LINES.times { @repair.repair_line_items.build }
   end
 
   def create
-    @repair = Repair.new(repair_params)
+    @repair = Repair.new(permitted_attributes(Repair.new))
+    authorize @repair
     @repair.taken_in_by = Current.user
 
     if @repair.save
@@ -36,7 +41,9 @@ class RepairsController < ApplicationController
   end
 
   def update
-    if @repair.update(repair_params)
+    authorize @repair
+
+    if @repair.update(permitted_attributes(@repair))
       redirect_to @repair, notice: "Repair ##{@repair.id} was updated."
     else
       pad_blank_lines
@@ -45,6 +52,8 @@ class RepairsController < ApplicationController
   end
 
   def destroy
+    authorize @repair
+
     if @repair.destroy
       redirect_to repairs_path, status: :see_other,
                   notice: "Repair ##{@repair.id} was deleted."
@@ -56,26 +65,17 @@ class RepairsController < ApplicationController
 
   private
 
+  # A mechanic who asks for a repair that is not theirs gets a 404 here, before
+  # the policy is even reached: the scope and the policy give the same answer.
   def set_repair
-    @repair = Repair.includes(:rich_text_diagnosis, :taken_in_by, PHOTO_PRELOAD).find(params[:id])
+    @repair = policy_scope(Repair)
+                .includes(:rich_text_diagnosis, :taken_in_by, PHOTO_PRELOAD)
+                .find(params[:id])
   end
 
   def pad_blank_lines
     (BLANK_LINES - @repair.repair_line_items.select(&:new_record?).size).times do
       @repair.repair_line_items.build
     end
-  end
-
-  def repair_params
-    attrs = params.expect(repair: [:bike_id, :received_by_id, :assigned_mechanic_id, :status,
-                                   :promised_on, :dropped_off_at, :completed_at, :picked_up_at,
-                                   :customer_approved, :diagnosis,
-                                   intake_photos: [],
-                                   repair_line_items_attributes: [[:id, :service_type_id,
-                                                                  :price_charged, :discount_note,
-                                                                  :_destroy]]])
-
-    photos = Array(attrs[:intake_photos]).reject(&:blank?)
-    photos.any? ? attrs.merge(intake_photos: photos) : attrs.except(:intake_photos)
   end
 end

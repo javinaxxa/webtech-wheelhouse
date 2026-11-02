@@ -1,4 +1,8 @@
 class PasswordsController < ApplicationController
+  # Authentication and the static pages have no model and no policy; they are
+  # listed in docs/decisions.md with the reason they are open.
+  skip_after_action :verify_authorized, :verify_policy_scoped
+
   allow_unauthenticated_access
   before_action :set_user_by_token, only: %i[ edit update ]
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_password_path, alert: "Try again later." }
