@@ -2,6 +2,7 @@ class CustomersController < ApplicationController
   before_action :set_customer, only: [:show, :edit, :update, :destroy]
 
   def index
+    authorize Customer
     @customers = policy_scope(Customer).by_name.includes(:bikes)
   end
 

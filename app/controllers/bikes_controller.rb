@@ -2,6 +2,7 @@ class BikesController < ApplicationController
   before_action :set_bike, only: [:show, :edit, :update, :destroy]
 
   def index
+    authorize Bike
     @bikes = policy_scope(Bike).by_make_and_model.includes(:customer, :repairs)
   end
 
