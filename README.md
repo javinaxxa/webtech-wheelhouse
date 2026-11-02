@@ -29,14 +29,14 @@ Wheelhouse is a repair tracking system for a neighbourhood bicycle repair shop. 
 ## Setup
 
 ```bash
-git clone <this repository's URL>
+git clone https://github.com/javinaxxa/webtech-wheelhouse.git
 cd webtech-wheelhouse
 bundle install
 yarn install
 bin/rails db:prepare
 ```
 
-`bin/rails db:prepare` creates the database if it doesn't exist, loads the schema, and seeds it one command, for a fresh clone.
+`bin/rails db:prepare` creates the database if it doesn't exist, loads the schema, and seeds it: one command, for a fresh clone.
 
 ## Running the application
 
