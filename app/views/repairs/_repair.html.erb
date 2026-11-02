@@ -10,8 +10,20 @@
             style="width: 80px; height: 60px; line-height: 60px">No photo</span>
     <% end %>
   </td>
-  <td><%= link_to "#{repair.bike.make} #{repair.bike.model}", repair.bike %></td>
-  <td><%= link_to repair.bike.customer.name, repair.bike.customer %></td>
+  <td>
+    <% if policy(repair.bike).show? %>
+      <%= link_to "#{repair.bike.make} #{repair.bike.model}", repair.bike %>
+    <% else %>
+      <%= "#{repair.bike.make} #{repair.bike.model}" %>
+    <% end %>
+  </td>
+  <td>
+    <% if policy(repair.bike.customer).show? %>
+      <%= link_to repair.bike.customer.name, repair.bike.customer %>
+    <% else %>
+      <%= repair.bike.customer.name %>
+    <% end %>
+  </td>
   <td><%= status_badge(repair) %></td>
   <td><%= l(repair.promised_on, format: :long) %></td>
   <td class="text-muted small" style="max-width: 20rem">

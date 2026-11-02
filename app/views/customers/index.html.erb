@@ -19,4 +19,6 @@
   </table>
 <% end %>
 
-<%= link_to "New customer", new_customer_path, class: "btn btn-primary mt-3" %>
+<% if policy(Customer).create? %>
+  <%= link_to "New customer", new_customer_path, class: "btn btn-primary mt-3" %>
+<% end %>

@@ -21,4 +21,6 @@
   </table>
 <% end %>
 
-<%= link_to "New bike", new_bike_path, class: "btn btn-primary mt-3" %>
+<% if policy(Bike).create? %>
+  <%= link_to "New bike", new_bike_path, class: "btn btn-primary mt-3" %>
+<% end %>

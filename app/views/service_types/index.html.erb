@@ -17,4 +17,6 @@
     </tbody>
   </table>
 <% end %>
-<%= link_to "New service", new_service_type_path, class: "btn btn-primary mt-3" %>
+<% if policy(ServiceType).create? %>
+  <%= link_to "New service", new_service_type_path, class: "btn btn-primary mt-3" %>
+<% end %>

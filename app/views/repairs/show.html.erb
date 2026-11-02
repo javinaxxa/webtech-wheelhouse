@@ -9,12 +9,20 @@
     <dl class="row mb-0 mt-3">
       <dt class="col-sm-3">Bike</dt>
       <dd class="col-sm-9">
-        <%= link_to "#{@repair.bike.make} #{@repair.bike.model} (#{@repair.bike.serial_number})", @repair.bike %>
+        <% if policy(@repair.bike).show? %>
+          <%= link_to "#{@repair.bike.make} #{@repair.bike.model} (#{@repair.bike.serial_number})", @repair.bike %>
+        <% else %>
+          <%= "#{@repair.bike.make} #{@repair.bike.model} (#{@repair.bike.serial_number})" %>
+        <% end %>
       </dd>
 
       <dt class="col-sm-3">Customer</dt>
       <dd class="col-sm-9">
-        <%= link_to @repair.bike.customer.name, @repair.bike.customer %>
+        <% if policy(@repair.bike.customer).show? %>
+          <%= link_to @repair.bike.customer.name, @repair.bike.customer %>
+        <% else %>
+          <%= @repair.bike.customer.name %>
+        <% end %>
       </dd>
 
       <dt class="col-sm-3">Received by</dt>
@@ -141,8 +149,12 @@
 <% end %>
 
 <%= link_to "All repairs", repairs_path, class: "btn btn-outline-secondary mt-3" %>
-<%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-outline-primary mt-3" %>
-<%= button_to "Delete", @repair, method: :delete,
-    form_class: "d-inline",
-    data: { turbo_confirm: "Delete repair ##{@repair.id}?" },
-    class: "btn btn-outline-danger mt-3" %>
+<% if policy(@repair).edit? %>
+  <%= link_to "Edit", edit_repair_path(@repair), class: "btn btn-outline-primary mt-3" %>
+<% end %>
+<% if policy(@repair).destroy? %>
+  <%= button_to "Delete", @repair, method: :delete,
+      form_class: "d-inline",
+      data: { turbo_confirm: "Delete repair ##{@repair.id}?" },
+      class: "btn btn-outline-danger mt-3" %>
+<% end %>
