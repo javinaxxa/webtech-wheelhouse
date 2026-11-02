@@ -110,14 +110,16 @@ python3 -m http.server 8000
 Every page needs an account, except the price list, signing in, signing up and the pages of a
 forgotten password. The accounts of the seed exist **only in development**, with these passwords:
 
-| Email address | Role | Password | Member of staff |
-|---|---|---|---|
-| `marcela@wheelhouse.cl` | owner | `tallerdelbarrio` | Marcela Ayala |
-| `antonia@wheelhouse.cl` | counter | `mostradorlunes` | Antonia Silva |
-| `rodrigo@wheelhouse.cl` | mechanic | `cadenayplato25` | Rodrigo Fuentes |
-| `pablo@wheelhouse.cl` | mechanic | `frenoshidraulicos` | Pablo Vidal |
-| `camila@wheelhouse.cl` | mechanic | `ruedascentradas` | Camila Ríos |
-| `nuevo@wheelhouse.cl` | mechanic | `reciencontratado` | none |
+| Email address | Role | Password | Member of staff | What this account can do |
+|---|---|---|---|---|
+| `marcela@wheelhouse.cl` | owner | `tallerdelbarrio` | Marcela Ayala | Everything: the price list, the staff, the customers and every repair |
+| `antonia@wheelhouse.cl` | counter | `mostradorlunes` | Antonia Silva | Takes bikes in, writes customers and bikes, edits any repair that has not been handed back |
+| `rodrigo@wheelhouse.cl` | mechanic | `cadenayplato25` | Rodrigo Fuentes | Reads and edits only the repairs assigned to him, and only their state, diagnosis and photos |
+| `pablo@wheelhouse.cl` | mechanic | `frenoshidraulicos` | Pablo Vidal | The same, for the repairs assigned to him |
+| `camila@wheelhouse.cl` | mechanic | `ruedascentradas` | Camila Ríos | The same, for the repairs assigned to her |
+| `nuevo@wheelhouse.cl` | mechanic | `reciencontratado` | none | Belongs to nobody on the staff, so it has no repairs of its own and reads none |
+
+Who may do what, in full, is in [`docs/permissions.md`](docs/permissions.md).
 
 Signing up from the browser creates an account with the role `mechanic`, the one with the fewest
 permissions. The reason is in [`docs/decisions.md`](docs/decisions.md). Changing a role, or joining
