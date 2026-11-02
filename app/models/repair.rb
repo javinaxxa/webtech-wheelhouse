@@ -42,6 +42,10 @@ class Repair < ApplicationRecord
     !handed_back_state? && promised_on.present? && promised_on < Date.current
   end
 
+  def handed_back?
+    picked_up?
+  end
+
   def total
     repair_line_items.sum(:price_charged)
   end

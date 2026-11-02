@@ -69,3 +69,6 @@ end
 
 # Cross-origin requests from the shop website that reads the API.
 gem "rack-cors"
+
+# Authorization: one policy per model, asked by the controllers and the views.
+gem "pundit"
